@@ -17,7 +17,7 @@ sequential_bfs(int n, vec_int* adjList, int src)
 
   vec_int_push_back(&frontier, src);
 
-  while (!frontier.size) {
+  while (frontier.size) {
     foreach(vec_int, &frontier, it) {
       int u = *it.ref;
 
