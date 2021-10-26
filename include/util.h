@@ -5,7 +5,9 @@
 #define T int
 #include <vec.h>
 
-vec_int* read_dataset(char* dataset, int* n, int *src){
+vec_int*
+read_dataset(char* dataset, int* n, int *src)
+{
   FILE* input;
   char* line;
 
@@ -37,5 +39,4 @@ vec_int* read_dataset(char* dataset, int* n, int *src){
   fclose(input);
 
   return adjList;
-
 }

@@ -86,12 +86,12 @@ parallel_bfs(int n, vec_int* adjList, int src, int num_threads)
   for (int i = 0; i < n; ++i) {
     printf("Level of %d = %d\n", i, lvl[i]);
   }
-
-
 }
 
 
-int main(int argc, char* argv[]){
+int
+main(int argc, char* argv[])
+{
   char* filename = argv[1];
   int n = 0, src;
   vec_int* adjList = read_dataset(filename, &n, &src);
