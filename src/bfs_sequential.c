@@ -41,6 +41,8 @@ sequential_bfs(int n, vec_int* adjList, int src)
     printf("Level of %d = %d\n", i, lvl[i]);
   }
 
+  free(lvl);
+  free(adjList);
 
 }
 
