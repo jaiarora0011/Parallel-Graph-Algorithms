@@ -17,6 +17,10 @@ PROCESSED = $(patsubst datasets/%.txt, input/%.txt, $(DATASETS))
 INPUTS = $(wildcard input/*.txt)
 OUTPUT_SEQ = $(patsubst input/%.txt, output/%_seq.txt, $(INPUTS))
 OUTPUT_OMP = $(patsubst input/%.txt, output/%_omp.txt, $(INPUTS))
+OUTPUT_MPI = $(patsubst input/%.txt, output/%_mpi.txt, $(INPUTS))
+
+CMP_OMP = $(patsubst output/%_omp.txt, %_omp-cmp, $(OUTPUT_OMP))
+CMP_MPI = $(patsubst output/%_mpi.txt, %_mpi-cmp, $(OUTPUT_MPI))
 
 .PHONY: all clean compiler linker preprocess
 
@@ -41,6 +45,12 @@ obj/%.o: src/%.c $(DEPS)
 bin/%: obj/%.o
 	@$(CC) $< -o $@ $(LIBS)
 
+obj/bfs_mpi.o: src/bfs_mpi.c $(DEPS)
+	mpicc -c $< -o $@ $(CFLAGS)
+
+bin/bfs_mpi: obj/bfs_mpi.o
+	mpicc $< -o $@
+
 input/%.txt: datasets/%.txt
 	@$(PYTHON) $(PREPROC) $< $@
 
@@ -58,3 +68,25 @@ test_omp: bin/bfs_omp $(OUTPUT_OMP)
 
 output/%_omp.txt: input/%.txt bin/bfs_omp
 	./bin/bfs_omp $< 8 | tee -i $@
+
+.PHONY: cmp_omp
+
+cmp_omp: $(CMP_OMP)
+
+%_omp-cmp: output/%_omp.txt output/%_seq.txt
+	@cmp --silent $^  && (echo 'omp output matches seq') || echo '---- FAIL omp ----'
+
+
+.PHONY: test_mpi
+
+test_mpi: bin/bfs_mpi $(OUTPUT_MPI)
+
+output/%_mpi.txt: input/%.txt bin/bfs_mpi
+	mpirun -np 4 bin/bfs_mpi $< | tee -i $@
+
+.PHONY: cmp_mpi
+
+cmp_mpi: $(CMP_MPI)
+
+%_mpi-cmp: output/%_mpi.txt output/%_seq.txt
+	@cmp --silent $^  && (echo 'mpi output matches seq') || echo '---- FAIL mpi ----'
