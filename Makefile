@@ -5,6 +5,9 @@ LIBS=-fopenmp
 PYTHON=python3
 PREPROC=src/modify_edge_file.py
 
+T=8
+P=4
+
 
 SOURCES = $(wildcard src/*.c)
 OBJECTS = $(patsubst src/%.c, obj/%.o, $(SOURCES))
@@ -67,7 +70,7 @@ output/%_seq.txt: input/%.txt bin/bfs_sequential
 test_omp: bin/bfs_omp $(OUTPUT_OMP)
 
 output/%_omp.txt: input/%.txt bin/bfs_omp
-	@./bin/bfs_omp $< 8 | tee -i $@
+	@./bin/bfs_omp $< $(T) | tee -i $@
 
 .PHONY: cmp_omp
 
@@ -82,7 +85,7 @@ cmp_omp: $(CMP_OMP)
 test_mpi: bin/bfs_mpi $(OUTPUT_MPI)
 
 output/%_mpi.txt: input/%.txt bin/bfs_mpi
-	@mpirun -np 4 bin/bfs_mpi $< | sort -n | tee -i $@
+	@mpirun -np $(P) bin/bfs_mpi $< | sort -n | tee -i $@
 
 .PHONY: cmp_mpi
 
