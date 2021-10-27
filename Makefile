@@ -46,10 +46,10 @@ bin/%: obj/%.o
 	@$(CC) $< -o $@ $(LIBS)
 
 obj/bfs_mpi.o: src/bfs_mpi.c $(DEPS)
-	mpicc -c $< -o $@ $(CFLAGS)
+	@mpicc -c $< -o $@ $(CFLAGS)
 
 bin/bfs_mpi: obj/bfs_mpi.o
-	mpicc $< -o $@
+	@mpicc $< -o $@
 
 input/%.txt: datasets/%.txt
 	@$(PYTHON) $(PREPROC) $< $@
@@ -60,14 +60,14 @@ input/%.txt: datasets/%.txt
 test_seq: bin/bfs_sequential $(OUTPUT_SEQ)
 
 output/%_seq.txt: input/%.txt bin/bfs_sequential
-	./bin/bfs_sequential $< | tee -i $@
+	@./bin/bfs_sequential $< | tee -i $@
 
 .PHONY: test_omp
 
 test_omp: bin/bfs_omp $(OUTPUT_OMP)
 
 output/%_omp.txt: input/%.txt bin/bfs_omp
-	./bin/bfs_omp $< 8 | tee -i $@
+	@./bin/bfs_omp $< 8 | tee -i $@
 
 .PHONY: cmp_omp
 
@@ -82,7 +82,7 @@ cmp_omp: $(CMP_OMP)
 test_mpi: bin/bfs_mpi $(OUTPUT_MPI)
 
 output/%_mpi.txt: input/%.txt bin/bfs_mpi
-	mpirun -np 4 bin/bfs_mpi $< | tee -i $@
+	@mpirun -np 4 bin/bfs_mpi $< | sort -n | tee -i $@
 
 .PHONY: cmp_mpi
 

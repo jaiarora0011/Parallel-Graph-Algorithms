@@ -84,8 +84,12 @@ parallel_bfs(int n, vec_int* adjList, int src, int num_threads)
   }
 
   for (int i = 0; i < n; ++i) {
-    printf("Level of %d = %d\n", i, lvl[i]);
+    printf("%d\t%d\n", i, lvl[i]);
   }
+
+  free(lvl);
+  free(adjList);
+  free(local_frontier_sizes);
 }
 
 

@@ -171,12 +171,19 @@ distributed_bfs_1D(int n, vec_int* adjList, int src, int size, int my_rank)
 
   }
 
-  for (int i = 0; i < my_num_v; ++i) {
-    printf("Level of %d = %d\n", VERTEX(i), lvl[i]);
+  for (int p = 0; p < size; ++p) {
+    if (my_rank == p){
+      for (int i = 0; i < my_num_v; ++i) {
+        printf("%d\t%d\n", VERTEX(i), lvl[i]);
+      }
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
   }
+
 
   free(lvl);
   free(adjList);
+  free(Buffer);
 
 }
 
