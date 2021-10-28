@@ -1,7 +1,7 @@
 import sys
 import re
 
-def create_simplified_file(input_filename, output_filename):
+def create_simplified_file(input_filename, output_filename, undirected):
     '''
         Creates a simplified graph file
         Assume that lines starting with hashtag(#) are comments
@@ -19,7 +19,6 @@ def create_simplified_file(input_filename, output_filename):
     '''
     n = 0
     m = 0
-    undirected = 1
     root = 0
     node_map = {}
     delimiters = [",","\t","\s"]
@@ -88,12 +87,14 @@ def create_simplified_file(input_filename, output_filename):
 
 if __name__=="__main__":
     print("Starting script")
-    if not(len(sys.argv)==3):
-        print("Need 2 inputs")
+    if not(len(sys.argv)==4):
+        print("Need 3 inputs")
         print("> Original file")
         print("> New file")
+        print("> Undirected Flag")
         exit(0)
     input_file = sys.argv[1]
     output_file = sys.argv[2]
-    create_simplified_file(input_file, output_file)
+    undir = int(sys.argv[3])
+    create_simplified_file(input_file, output_file, undir)
     
