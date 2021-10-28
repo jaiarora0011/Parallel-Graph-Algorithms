@@ -6,6 +6,29 @@
 2. Shared Memory BFS
 3. Distributed Memory BFS 1D
 
+## I/O Specs
+
+### Input Format
+
+Each file in `input/` should have the format:
+```
+n m r undirected
+u_1 v_1 uv_1
+...
+u_m v_m uv_m
+
+Here
+    n               :   Number of unique nodes in the graph
+    m               :   Number of edges in the graph
+```
+
+### Output format
+Each file in `output/` has the format:
+```
+u  d_u
+```
+
+
 ## Usage
 
 #### Build all the binaries
@@ -40,9 +63,9 @@ This will take all input files in `input/` and run the three algorithms on them.
 #### Running a specific algorithm on an input
 
 ```bash
-./run.sh seq <input_file>
-./run.sh omp <input_file> <num_threads>
-./run.sh mpi <input_file> <num_procs>
+./run.sh seq <input_file> <output_file>
+./run.sh omp <input_file> <output_file> <num_threads>
+./run.sh mpi <input_file> <output_file> <num_procs>
 ```
 
 #### Validating the outputs

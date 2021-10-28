@@ -63,14 +63,14 @@ input/%.txt: datasets/%.txt
 test_seq: bin/bfs_seq $(OUTPUT_SEQ)
 
 output/%_seq.txt: input/%.txt bin/bfs_seq
-	@./run.sh seq $< | tee -i $@
+	@./run.sh seq $< $@
 
 .PHONY: test_omp
 
 test_omp: bin/bfs_omp $(OUTPUT_OMP)
 
 output/%_omp.txt: input/%.txt bin/bfs_omp
-	@./run.sh omp $< $(T) | tee -i $@
+	@./run.sh omp $< $@ $(T)
 
 .PHONY: cmp_omp
 
@@ -85,7 +85,7 @@ cmp_omp: $(CMP_OMP)
 test_mpi: bin/bfs_mpi $(OUTPUT_MPI)
 
 output/%_mpi.txt: input/%.txt bin/bfs_mpi
-	@./run.sh mpi $< $(P) | tee -i $@
+	@./run.sh mpi $< $@ $(P)
 
 .PHONY: cmp_mpi
 
