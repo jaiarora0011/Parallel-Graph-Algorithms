@@ -21,6 +21,13 @@ This will take all files in `datasets/` and preprocess each of them. Preprocesse
 ```bash
 make preprocess
 ```
+
+To manually preprocess a specific file:
+```bash
+./run.sh preprocess <input_file> <output_file> <undir>
+```
+Here, `undir` = 1 for an undirected graph, 0 otherwise.
+
 #### Running all Tests
 
 ```bash
@@ -33,9 +40,9 @@ This will take all input files in `input/` and run the three algorithms on them.
 #### Running a specific algorithm on an input
 
 ```bash
-bin/bfs_seq <input_file>
-bin/bfs_omp <input_file> <num_threads>
-mpicc -np <num_procs> bin/bfs_omp <input_file>
+./run.sh seq <input_file>
+./run.sh omp <input_file> <num_threads>
+./run.sh mpi <input_file> <num_procs>
 ```
 
 #### Validating the outputs

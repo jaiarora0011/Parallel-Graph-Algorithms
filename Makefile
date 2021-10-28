@@ -3,7 +3,7 @@ CC=gcc
 CFLAGS=-I$(IDIR)
 LIBS=-fopenmp
 PYTHON=python3
-PREPROC=src/modify_edge_file.py
+PREPROC=src/preprocess.py
 
 T=8
 P=4
@@ -55,22 +55,22 @@ bin/bfs_mpi: obj/bfs_mpi.o
 	@mpicc $< -o $@
 
 input/%.txt: datasets/%.txt
-	@$(PYTHON) $(PREPROC) $< $@
+	@$(PYTHON) $(PREPROC) $< $@ 0
 
 
 .PHONY: test_seq
 
-test_seq: bin/bfs_sequential $(OUTPUT_SEQ)
+test_seq: bin/bfs_seq $(OUTPUT_SEQ)
 
-output/%_seq.txt: input/%.txt bin/bfs_sequential
-	@./bin/bfs_sequential $< | tee -i $@
+output/%_seq.txt: input/%.txt bin/bfs_seq
+	@./run.sh seq $< | tee -i $@
 
 .PHONY: test_omp
 
 test_omp: bin/bfs_omp $(OUTPUT_OMP)
 
 output/%_omp.txt: input/%.txt bin/bfs_omp
-	@./bin/bfs_omp $< $(T) | tee -i $@
+	@./run.sh omp $< $(T) | tee -i $@
 
 .PHONY: cmp_omp
 
@@ -85,7 +85,7 @@ cmp_omp: $(CMP_OMP)
 test_mpi: bin/bfs_mpi $(OUTPUT_MPI)
 
 output/%_mpi.txt: input/%.txt bin/bfs_mpi
-	@mpirun -np $(P) bin/bfs_mpi $< | sort -n | tee -i $@
+	@./run.sh mpi $< $(P) | tee -i $@
 
 .PHONY: cmp_mpi
 
